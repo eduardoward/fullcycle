@@ -5,14 +5,9 @@ services:
       context: node
     image: eduardoward/node
     container_name: app
-    #entrypoint: dockerize -wait tcp://db:3306 -timeout 20s docker-entrypoint.sh
     tty: true
     networks:
       - node-network
-    volumes:
-      - ./node:/usr/src/app
-    #ports:
-    #  - "3000:3000"
     healthcheck:
       test: curl --fail http://localhost:3000/ || exit 1
       interval: 5s
@@ -37,19 +32,22 @@ services:
         condition: service_healthy
 
   db:
-    image: mysql:5.7
+    build:
+      context: db
+    image: eduardoward/db
     command: --innodb-use-native-aio=0
     container_name: db
     restart: always
-    tty: true
     volumes:
-      - ./mysql:/var/lib/mysql
+      - ./db/mysql:/var/lib/mysql
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
     environment:
       - MYSQL_DATABASE=nodedb
       - MYSQL_ROOT_PASSWORD=root
+    tty: true
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$$MYSQL_ROOT_PASSWORD"]
-      interval: 5s
+      interval: 10s
       timeout: 10s
       retries: 10
     networks:
