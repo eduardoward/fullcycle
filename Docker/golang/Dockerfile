@@ -4,9 +4,9 @@ WORKDIR /app
 
 COPY . .
 RUN go env -w GO111MODULE=off
-RUN go build -o fullcycle .
+RUN go build -ldflags "-w -s" -o fullcycle .
 
-FROM alpine:latest
+FROM scratch
 
 WORKDIR /app
 
