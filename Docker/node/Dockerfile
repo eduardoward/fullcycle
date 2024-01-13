@@ -1,17 +1,15 @@
-FROM node:15
+FROM node:latest
 
 WORKDIR /usr/src/app
 
-#alterando de dockerize para healthcheck
-#RUN apt-get install -y wget \
-#    && wget -O - https://github.com/jwilder/dockerize/releases/download/v0.7.0/dockerize-linux-amd64-v0.7.0.tar.gz | tar xzf - -C /usr/local/bin \
-#    && apt-get autoremove -yqq --purge wget && rm -rf /var/lib/apt/lists/*
+
+COPY package*.json ./
+
+RUN npm install
 
 RUN npm install mysql --save
 
-COPY . .
-
-
+COPY  . .
 
 EXPOSE 3000
 

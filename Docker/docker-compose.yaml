@@ -6,8 +6,11 @@ services:
     image: eduardoward/node
     container_name: app
     tty: true
+    command: bash -c "npm install && node index.js"
     networks:
       - node-network
+    volumes:
+      - ./node:/usr/src/app
     healthcheck:
       test: curl --fail http://localhost:3000/ || exit 1
       interval: 5s
@@ -32,9 +35,7 @@ services:
         condition: service_healthy
 
   db:
-    build:
-      context: db
-    image: eduardoward/db
+    image: mysql:5.7
     command: --innodb-use-native-aio=0
     container_name: db
     restart: always

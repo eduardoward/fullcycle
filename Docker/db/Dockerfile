@@ -1,6 +1,0 @@
-FROM mysql:5.7
-
-#WORKDIR /var/lib/
-ENV MYSQL_DATABASE=nodedb
-ENV MYSQL_ROOT_PASSWORD=root
-#COPY . .
